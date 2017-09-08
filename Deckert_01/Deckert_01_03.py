@@ -13,13 +13,25 @@ class cl_world:
         self.canvases.append(canvas)
         canvas.world = self
 
-    def create_graphic_objects(self, canvas):
-        self.objects.append(canvas.create_line(0, 0, canvas.cget("width"), canvas.cget("height")))
-        self.objects.append(canvas.create_line(canvas.cget("width"), 0, 0, canvas.cget("height")))
-        self.objects.append(canvas.create_oval(int(0.25 * int(canvas.cget("width"))),
-                                               int(0.25 * int(canvas.cget("height"))),
-                                               int(0.75 * int(canvas.cget("width"))),
-                                               int(0.75 * int(canvas.cget("height")))))
+    def create_graphic_objects(self, canvas, filename):
+	file = open(filename, 'r')
+	data = file.read()
+	file.close()
+	
+	rows = data.splitlines()
+
+	for row in rows:
+		coords = row.split(" ")
+		if coords[0] == "f":
+			
+		self.objects.append
+
+	#self.objects.append(canvas.create_line(0, 0, canvas.cget("width"), canvas.cget("height")))
+        #self.objects.append(canvas.create_line(canvas.cget("width"), 0, 0, canvas.cget("height")))
+        #self.objects.append(canvas.create_oval(int(0.25 * int(canvas.cget("width"))),
+        #                                       int(0.25 * int(canvas.cget("height"))),
+        #                                       int(0.75 * int(canvas.cget("width"))),
+        #                                       int(0.75 * int(canvas.cget("height")))))
 
     def redisplay(self, canvas, event):
         if self.objects:

@@ -28,7 +28,7 @@ class cl_widgets:
 class cl_canvas_frame:
     def __init__(self, master):
         self.master = master
-        self.canvas = tk.Canvas(master.ob_root_window, width=640, height=480, bg="yellow")
+        self.canvas = tk.Canvas(master.ob_root_window, width=640, height=480, highlightthickness=0, bg="yellow")
         self.canvas.pack(expand=tk.YES, fill=tk.BOTH)
         self.canvas.bind('<Configure>', self.canvas_resized_callback)
         self.canvas.bind("<ButtonPress-1>", self.left_mouse_click_callback)
@@ -289,10 +289,14 @@ class cl_toolbar:
         self.master.statusBar_frame.set('%s',"called the draw callback!")
 
     def toolbar_load_callback(self):
-        self.entry.delete(0, -1);
+        self.entry.delete(0, 'end');
         self.var_filename.set(tk.filedialog.askopenfilename(filetypes=[("allfiles", "*"), ("pythonfiles", "*.txt")]))
         filename = self.var_filename.get()
         self.entry.insert(0,filename)
+        self.master.ob_world.create_graphic_objects(self.master.ob_canvas_frame.canvas, filename)
+	#file = open(filename, mode = 'r')
+
+
 
     def toolbar_callback(self):
         self.master.statusBar_frame.set('%s',"called the toolbar callback!")
