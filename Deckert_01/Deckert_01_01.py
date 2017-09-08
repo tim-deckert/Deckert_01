@@ -4,8 +4,8 @@
 # Assignment_00_01
 
 import tkinter as tk
-import Deckert_00_02 as k02  # This module includes all the widgets
-import Deckert_00_03 as k03  # This module includes graphic components
+import Deckert_01_02 as k02  # This module includes all the widgets
+import Deckert_01_03 as k03  # This module includes graphic components
 
 
 def close_window_callback(root):

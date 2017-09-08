@@ -269,16 +269,30 @@ class cl_menu:
 class cl_toolbar:
     def __init__(self, master):
         self.master = master
+        
+        self.var_filename = tk.StringVar()
+        self.var_filename.set('')
+        
         self.toolbar = tk.Frame(master.ob_root_window)
         self.button = tk.Button(self.toolbar, text="Draw", width=16, command=self.toolbar_draw_callback)
         self.button.pack(side=tk.LEFT, padx=2, pady=2)
         self.button = tk.Button(self.toolbar, text="Toolbar Button 2", width=16, command=self.toolbar_callback)
         self.button.pack(side=tk.RIGHT, padx=2, pady=2)
+        self.button = tk.Button(self.toolbar, text="Load", width=16, command=self.toolbar_load_callback)
+        self.button.pack(side=tk.RIGHT, padx=2, pady=2)
+        self.entry = tk.Entry(self.toolbar)
+        self.entry.pack(side=tk.RIGHT, padx=2, pady=2)
         self.toolbar.pack(side=tk.TOP, fill=tk.X)
 
     def toolbar_draw_callback(self):
         self.master.ob_world.create_graphic_objects(self.master.ob_canvas_frame.canvas)
         self.master.statusBar_frame.set('%s',"called the draw callback!")
+
+    def toolbar_load_callback(self):
+        self.entry.delete(0, -1);
+        self.var_filename.set(tk.filedialog.askopenfilename(filetypes=[("allfiles", "*"), ("pythonfiles", "*.txt")]))
+        filename = self.var_filename.get()
+        self.entry.insert(0,filename)
 
     def toolbar_callback(self):
         self.master.statusBar_frame.set('%s',"called the toolbar callback!")
