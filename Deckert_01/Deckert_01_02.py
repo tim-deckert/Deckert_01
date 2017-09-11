@@ -285,7 +285,7 @@ class cl_toolbar:
         self.toolbar.pack(side=tk.TOP, fill=tk.X)
 
     def toolbar_draw_callback(self):
-        self.master.ob_world.create_graphic_objects(self.master.ob_canvas_frame.canvas)
+        self.master.ob_world.create_graphic_objects(self.master.ob_canvas_frame.canvas, self.entry.get())
         self.master.statusBar_frame.set('%s',"called the draw callback!")
 
     def toolbar_load_callback(self):
