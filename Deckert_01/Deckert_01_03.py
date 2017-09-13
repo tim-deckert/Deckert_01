@@ -33,54 +33,69 @@ class cl_world:
             coords = row.split(" ")
 
             if coords[0] == "v":
-                vertices.append(coords)
+                coords.append(1.0)
+                coordMat = np.array(coords[1:], dtype=np.float32)
+                vertices.append(coordMat)
             if coords[0] == "f":
-                faces.append(coords)
+                coordMat = np.array(coords[1:], dtype=np.int32)
+                faces.append(coordMat)
             if coords[0] == "w":
-                window = coords
+                window = np.array(coords[1:], dtype=np.float32)
             if coords[0] == "s":
-                viewport = coords
+                viewport = np.array(coords[1:], dtype=np.float32)
 
-        viewport[1] = int(float(viewport[1]) * float(canvas.cget("width")))
-        viewport[2] = int(float(viewport[2]) * float(canvas.cget("height")))
-        viewport[3] = int(float(viewport[3]) * float(canvas.cget("width")))
-        viewport[4] = int(float(viewport[4]) * float(canvas.cget("height")))
+        viewport[0] = int(viewport[0] * float(canvas.cget("width")))
+        viewport[1] = int(viewport[1] * float(canvas.cget("height")))
+        viewport[2] = int(viewport[2] * float(canvas.cget("width")))
+        viewport[3] = int(viewport[3] * float(canvas.cget("height")))
 
-        self.objects.append(canvas.create_rectangle(viewport[1], viewport[2], viewport[3], viewport[4], outline="red", width=2))
+        self.objects.append(canvas.create_rectangle(viewport[0], viewport[1], viewport[2], viewport[3], outline="red", width=2))
 
-        vpx = (viewport[3] - viewport[1]) / (float(window[3]) - float(window[1]))
-        vpy = (viewport[4] - viewport[2]) / (float(window[4]) - float(window[2]))
+        vpx = (viewport[2] - viewport[0]) / (window[2] - window[0])
+        vpy = (viewport[3] - viewport[1]) / (window[3] - window[1])
+
+        dxy = np.array([[1,0,0,-window[0]],[0,-1,0,window[3]],[0,0,1,0],[0,0,0,1]])
+        sxy = np.array([[vpx,0,0,0],[0,vpy,0,0],[0,0,1,0],[0,0,0,1]])
+        dvpxy = np.array([[1,0,0,viewport[0]],[0,1,0,viewport[1]],[0,0,1,0],[0,0,0,1]])
+
+##        print(dxy)
+##        print(sxy)
+##        print(dvpxy)
+
+        transform = np.dot(dvpxy, np.dot(sxy,dxy))
+##        print (transform)
+
+        particles = []
 
         for vertex in vertices:
-            vertex[1] = viewport[1] + int(vpx * (float(vertex[1]) - float(window[1])))
-            vertex[2] = viewport[2] + int(vpy * (float(window[4]) - float(vertex[2])))
+            particles.append(np.dot(transform, vertex))
+##            print (vertex)
 
         points = []
 
         for face in faces:
             for fp in face:
-                if fp.isdigit():
-                    points.append(vertices[int(fp)-1][1])
-                    points.append(vertices[int(fp)-1][2])
+                points.append(int(particles[int(fp)-1][0]))
+                points.append(int(particles[int(fp)-1][1]))
         
             self.objects.append(canvas.create_polygon(points, outline="red", fill="yellow"))
             points = []
-        #print (vertices)
-        #print (faces)
-        #print (window)
-        #print (viewport)
+##        print (points)
+##        print (faces)
+##        print (window)
+##        print (viewport)
         #print (canvas.cget("width"))
         #print (canvas.cget("height"))
 
     def redisplay(self, canvas, event):
         if self.objects:
-            for index, face in enumerate(self.objects):
-                if index == 0:
+            #for index, face in enumerate(self.objects):
+             #   if index == 0:
                     
-                print (canvas.coords(face))
-            #canvas.coords(self.objects[0], 0, 0, event.width, event.height)
-            #canvas.coords(self.objects[1], event.width, 0, 0, event.height)
-            #canvas.coords(self.objects[2], int(0.25 * int(event.width)),
-            #              int(0.25 * int(event.height)),
-            #              int(0.75 * int(event.width)),
-            #              int(0.75 * int(event.height)))
+              #  print (canvas.coords(face))
+            canvas.coords(self.objects[0], 0, 0, event.width, event.height)
+            canvas.coords(self.objects[1], event.width, 0, 0, event.height)
+            canvas.coords(self.objects[2], int(0.25 * int(event.width)),
+                          int(0.25 * int(event.height)),
+                          int(0.75 * int(event.width)),
+                          int(0.75 * int(event.height)))
