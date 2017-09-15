@@ -1,4 +1,4 @@
-# Deckert, Timothy
+2# Deckert, Timothy
 # 1000-637-406
 # 2017-09-01
 # Assignment_00_02
@@ -28,7 +28,7 @@ class cl_widgets:
 class cl_canvas_frame:
     def __init__(self, master):
         self.master = master
-        self.canvas = tk.Canvas(master.ob_root_window, width=640, height=480, highlightthickness=0, bg="yellow")
+        self.canvas = tk.Canvas(master.ob_root_window, width=640, height=480, bg="yellow")
         self.canvas.pack(expand=tk.YES, fill=tk.BOTH)
         self.canvas.bind('<Configure>', self.canvas_resized_callback)
         self.canvas.bind("<ButtonPress-1>", self.left_mouse_click_callback)
@@ -120,14 +120,16 @@ class cl_canvas_frame:
         self.y = event.y
 
     def canvas_resized_callback(self, event):
+        width = self.canvas.cget("width")
+        height = self.canvas.cget("height")
         self.canvas.config(width=event.width - 4, height=event.height - 4)
         # self.canvas.pack()
         self.master.statusBar_frame.pack(side=tk.BOTTOM, fill=tk.X)
         self.master.statusBar_frame.set('%s','Canvas width = '+str( self.canvas.cget("width"))+ \
                                         '   Canvas height = '+str( self.canvas.cget("height")))
         self.canvas.pack()
-        self.master.ob_world.redisplay(self.master.ob_canvas_frame.canvas, event)
 
+        self.master.ob_world.redisplay(self.master.ob_canvas_frame.canvas, event, width, height) 
 
 class cl_buttons_panel_01:
     def __init__(self, master):

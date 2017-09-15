@@ -30,6 +30,8 @@ class cl_world:
 
         for row in rows:
 
+            row = row.strip()
+
             coords = row.split(" ")
 
             if coords[0] == "v":
@@ -58,18 +60,12 @@ class cl_world:
         sxy = np.array([[vpx,0,0,0],[0,vpy,0,0],[0,0,1,0],[0,0,0,1]])
         dvpxy = np.array([[1,0,0,viewport[0]],[0,1,0,viewport[1]],[0,0,1,0],[0,0,0,1]])
 
-##        print(dxy)
-##        print(sxy)
-##        print(dvpxy)
-
         transform = np.dot(dvpxy, np.dot(sxy,dxy))
-##        print (transform)
-
+        
         particles = []
 
         for vertex in vertices:
             particles.append(np.dot(transform, vertex))
-##            print (vertex)
 
         points = []
 
@@ -80,22 +76,13 @@ class cl_world:
         
             self.objects.append(canvas.create_polygon(points, outline="red", fill="yellow"))
             points = []
-##        print (points)
-##        print (faces)
-##        print (window)
-##        print (viewport)
-        #print (canvas.cget("width"))
-        #print (canvas.cget("height"))
 
-    def redisplay(self, canvas, event):
+    def redisplay(self, canvas, event, width, height):
         if self.objects:
-            #for index, face in enumerate(self.objects):
-             #   if index == 0:
-                    
-              #  print (canvas.coords(face))
-            canvas.coords(self.objects[0], 0, 0, event.width, event.height)
-            canvas.coords(self.objects[1], event.width, 0, 0, event.height)
-            canvas.coords(self.objects[2], int(0.25 * int(event.width)),
-                          int(0.25 * int(event.height)),
-                          int(0.75 * int(event.width)),
-                          int(0.75 * int(event.height)))
+            points = []
+            
+            scaleX = (float(event.width) - 4) / float(width)
+            scaleY = (float(event.height) - 4) / float(height)
+            
+            for face in self.objects:
+                canvas.scale(face, 0, 0, scaleX, scaleY)
