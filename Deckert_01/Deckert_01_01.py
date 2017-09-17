@@ -1,7 +1,7 @@
 # Deckert, Timothy
 # 1000-637-406
-# 2017-09-01
-# Assignment_00_01
+# 2017-09-17
+# Assignment_01_01
 
 import tkinter as tk
 import Deckert_01_02 as k02  # This module includes all the widgets

@@ -1,7 +1,7 @@
 2# Deckert, Timothy
 # 1000-637-406
-# 2017-09-01
-# Assignment_00_02
+# 2017-09-17
+# Assignment_01_02
 
 
 import tkinter as tk
@@ -28,7 +28,7 @@ class cl_widgets:
 class cl_canvas_frame:
     def __init__(self, master):
         self.master = master
-        self.canvas = tk.Canvas(master.ob_root_window, width=640, height=480, bg="yellow")
+        self.canvas = tk.Canvas(master.ob_root_window, width=640, height=480, highlightthickness = 0, bg="yellow")
         self.canvas.pack(expand=tk.YES, fill=tk.BOTH)
         self.canvas.bind('<Configure>', self.canvas_resized_callback)
         self.canvas.bind("<ButtonPress-1>", self.left_mouse_click_callback)
@@ -278,9 +278,11 @@ class cl_toolbar:
         self.toolbar = tk.Frame(master.ob_root_window)
         self.button = tk.Button(self.toolbar, text="Draw", width=16, command=self.toolbar_draw_callback)
         self.button.pack(side=tk.LEFT, padx=2, pady=2)
-        self.button = tk.Button(self.toolbar, text="Toolbar Button 2", width=16, command=self.toolbar_callback)
-        self.button.pack(side=tk.RIGHT, padx=2, pady=2)
         self.button = tk.Button(self.toolbar, text="Load", width=16, command=self.toolbar_load_callback)
+        self.button.pack(side=tk.LEFT, padx=2, pady=2)
+        self.button = tk.Button(self.toolbar, text="Clear", width=16, command=self.toolbar_clear_callback)
+        self.button.pack(side=tk.RIGHT, padx=2, pady=2)
+        self.button = tk.Button(self.toolbar, text="Browse", width=16, command=self.toolbar_browse_callback)
         self.button.pack(side=tk.RIGHT, padx=2, pady=2)
         self.entry = tk.Entry(self.toolbar)
         self.entry.pack(side=tk.RIGHT, padx=2, pady=2)
@@ -291,15 +293,15 @@ class cl_toolbar:
         self.master.statusBar_frame.set('%s',"called the draw callback!")
 
     def toolbar_load_callback(self):
+        self.master.ob_world.create_graphic_objects(self.master.ob_canvas_frame.canvas, self.entry.get())
+
+    def toolbar_browse_callback(self):
         self.entry.delete(0, 'end');
         self.var_filename.set(tk.filedialog.askopenfilename(filetypes=[("allfiles", "*"), ("pythonfiles", "*.txt")]))
         filename = self.var_filename.get()
         self.entry.insert(0,filename)
-        self.master.ob_world.create_graphic_objects(self.master.ob_canvas_frame.canvas, filename)
-	#file = open(filename, mode = 'r')
 
-
-
-    def toolbar_callback(self):
-        self.master.statusBar_frame.set('%s',"called the toolbar callback!")
+    def toolbar_clear_callback(self):
+        self.master.statusBar_frame.set('%s',"called the clear callback!")
+        self.master.ob_world.clear_canvas(self.master.ob_canvas_frame.canvas)
 

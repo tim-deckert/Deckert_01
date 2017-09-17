@@ -1,7 +1,7 @@
 # Deckert, Timothy
 # 1000-637-406
-# 2017-09-01
-# Assignment_00_03
+# 2017-09-17
+# Assignment_01_03
 
 import numpy as np
 
@@ -19,9 +19,6 @@ class cl_world:
         file = open(filename, 'r')
         data = file.read()
         file.close()
-
-        if self.objects:
-             canvas.delete("all")
 	
         rows = data.splitlines()
 
@@ -86,3 +83,7 @@ class cl_world:
             
             for face in self.objects:
                 canvas.scale(face, 0, 0, scaleX, scaleY)
+
+    def clear_canvas(self, canvas):
+        if self.objects:
+             canvas.delete("all")
